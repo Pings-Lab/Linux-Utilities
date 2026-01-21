@@ -157,7 +157,7 @@ def ui():
 
 <div class="header">
     <div>
-        <h1 style="margin:0; font-size: 24px;"><img src="./pingslab.png" alt="pingslab"/>Ping's Lab</h1>
+        <h1 style="margin:0; font-size: 24px;"><img style="height:24px; width:24px;" src="https://raw.githubusercontent.com/Pings-Lab/Linux-Utilities/main/dashboard/ping.jpg" alt="pingslab"/>Ping's Lab</h1>
         <div id="os-info" style="opacity: 0.6; font-size: 14px;">Loading system...</div>
     </div>
     <div style="text-align: right">
