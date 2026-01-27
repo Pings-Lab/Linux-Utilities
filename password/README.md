@@ -91,3 +91,50 @@ sudo apt install wl-clipboard
 # On X11
 sudo apt install xclip
 ```
+
+
+## 👤 Users Section
+### 1. What is happening?
+- When you enter 'y' and enter website name for example, it will create a text file 'accounts'.
+- It will let you generate as many passwords as you want and go on appending website name and password to accounts file.
+- When you enter 'q' to quit. It will try to convert 'accounts' file to 'accounts.gpg' using gpg encryption and delete the 'accounts' text file.
+- If gpg encryption fails, it won't delete text file so you can view it and use.
+- Next time when you use password.py, it will decrypt the existing 'accounts.gpg' file and then appends the new passwords to it.
+
+### 2. How to see my Saved password?
+
+In the same directory where you have password.py is located run the below command. It will ask for your passphrase, after your passphrase your passwords will be listed in terminal.
+
+```bash
+gpg -d accounts.gpg
+```
+
+If you don't setup any gpg, you can view password by printing the text file.
+
+```bash
+cat accounts
+```
+
+### 3. Can I turn off the colors?
+
+You can do more than that.
+1. Open the password.py
+2. Scroll to the configuration section
+3. You can turn on or off the all available properties in configuration section.
+
+### 4. Can I contribute to the project?
+
+You are most welcome.
+Not only for this repo, any repo under this organization is open for use and modification
+
+1. Clone the repo
+2. Make your changes
+3. Create a pull request
+
+### 5. Can I join the Ping's lab organization?
+
+We welcome you with open arms.
+Use the Organization website or email to contact us.
+
+- Website: [link](https://pings-lab.github.io)
+- Email: thepingslab@gmail.com
