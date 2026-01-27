@@ -55,7 +55,7 @@ Designed with a Unix mindset: simple, composable, and safe by default.
 Clone the repository:
 
 ```bash
-git clone git@github.com:your-username/vault-spark.git
+git clone git@github.com:Pings-Lab/Linux-Utilities.git
 cd password
 ```
 
