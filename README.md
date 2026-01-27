@@ -10,3 +10,12 @@ Refer for details and installation: [Click](dashboard/README.md)
 
 <img src="dashboard/output.png" alt="Example output for linux utility dashboard" >
 
+## 2. Secure Pass
+
+Secure Pass is a lightweight, dependency-free Linux password generator and vault helper written in Python.
+It focuses on strong password generation, smooth CLI interaction, and optional GPG-based encryption without forcing virtual environments or Python package installs.
+
+Refer for details and installation: [Click](password/README.md)
+
+
+<img src="password/output.png" alt="Example output for Secure Pass" >
