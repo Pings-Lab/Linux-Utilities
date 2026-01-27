@@ -57,6 +57,7 @@ def decrypt_accounts():
         [
             "gpg",
             "--yes",
+            "--quiet",
             "--batch",
             "--decrypt",
             ACCOUNTS_GPG,
@@ -70,6 +71,7 @@ def encrypt_accounts():
         [
             "gpg",
             "--yes",
+            "--quiet",
             "--batch",
             "--encrypt",
             "--recipient",
