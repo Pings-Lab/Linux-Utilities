@@ -69,3 +69,21 @@ sudo $(uv run which python) linux_utility.py
 uv run python linux_utility.py
 ``` 
 
+## 👤 Users Section
+
+### 1. Can I contribute to the project?
+
+You are most welcome.
+Not only for this repo, any repo under this organization is open for use and modification
+
+1. Clone the repo
+2. Make your changes
+3. Create a pull request
+
+### 2. Can I join the Ping's lab organization?
+
+We welcome you with open arms.
+Use the Organization website or email to contact us.
+
+- Website: [link](https://pings-lab.github.io)
+- Email: thepingslab@gmail.com
