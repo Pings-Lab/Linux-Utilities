@@ -50,21 +50,34 @@ System Pulse is a lightweight Linux utility dashboard built with **FastAPI** tha
 
 ### Installation
 
-- uv installation (not necessary if you already have)
+
+1. uv installation (not necessary if you already have)
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Using `uv` (recommended):
-
-```bash
+2. clone the repo
+```repo
 git clone git@github.com:Pings-Lab/Linux-Utilities.git
-cd Linux-Utilities/dashboard/
+cd Linux-Utilities
+```
+
+3. if you don't want whole repo
+```bash
+git clone --depth 1 --filter=blob:none --sparse \
+https://github.com/Pings-Lab/Linux-Utilities.git \
+&& cd Linux-Utilities \
+&& git sparse-checkout set dashboard
+
+```
+4. setup uv and run
+```bash
+cd dashboard/
 uv sync
 sudo $(uv run which python) linux_utility.py
 ```
 
-- if you don't have sudo access
+5. if you don't have sudo access
 ```bash
 uv run python linux_utility.py
 ``` 
@@ -87,3 +100,4 @@ Use the Organization website or email to contact us.
 
 - Website: [link](https://pings-lab.github.io)
 - Email: thepingslab@gmail.com
+
