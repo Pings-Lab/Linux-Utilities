@@ -35,7 +35,7 @@ logo(name, (187, 94, 43), (262, 83, 58))
 # ---------- USER CONFIG ----------
 
 ENABLE_GPG = True                  # True = encrypt, False = plaintext only
-GPG_RECIPIENT = "pradeepubuntu@victus"  # must exist in: gpg --list-keys
+GPG_RECIPIENT = "pingslab@ubuntu"  # must exist in: gpg --list-keys
 ALLOW_PLAINTEXT_FALLBACK = True
 
 DATA_DIR = Path.home() / ".pingsvaults"
