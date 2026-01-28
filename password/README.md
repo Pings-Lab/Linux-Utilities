@@ -56,7 +56,7 @@ Clone the repository: For both CLI and GUI
 
 ```bash
 git clone git@github.com:Pings-Lab/Linux-Utilities.git
-cd password
+cd Linux-Utilities/password/
 ```
 
 Or just pull one file, if you want to use only CLI tool
