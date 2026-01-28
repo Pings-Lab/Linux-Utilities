@@ -52,14 +52,14 @@ Designed with a Unix mindset: simple, composable, and safe by default.
 
 ### Installation
 
-Clone the repository:
+Clone the repository: For both CLI and GUI
 
 ```bash
 git clone git@github.com:Pings-Lab/Linux-Utilities.git
 cd password
 ```
 
-Or just clone the Script
+Or just pull one file, if you want to use only CLI tool
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Pings-Lab/Linux-Utilities/main/password/password.py -o password.py
@@ -92,6 +92,14 @@ sudo apt install wl-clipboard
 sudo apt install xclip
 ```
 
+## For GUI usage
+Within the password directory,
+run these commands:
+
+```bash
+uv sync
+uv run python password_ui.py
+```
 
 ## 👤 Users Section
 ### 1. What is happening?
@@ -103,16 +111,16 @@ sudo apt install xclip
 
 ### 2. How to see my Saved password?
 
-In the same directory where you have password.py is located run the below command. It will ask for your passphrase, after your passphrase your passwords will be listed in terminal.
+Run the below command. It will ask for your passphrase, after your passphrase your passwords will be listed in terminal.
 
 ```bash
-gpg -d accounts.gpg
+gpg -d .pingsvaults/accounts.gpg
 ```
 
 If you don't setup any gpg, you can view password by printing the text file.
 
 ```bash
-cat accounts
+cat .pingsvaults/accounts
 ```
 
 ### 3. Can I turn off the colors?
