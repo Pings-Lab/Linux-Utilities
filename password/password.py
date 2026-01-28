@@ -5,7 +5,7 @@ import subprocess
 import secrets
 import string
 import shutil
-
+from pathlib import Path
 # --------------------------------
 import colorsys
 
@@ -35,12 +35,15 @@ logo(name, (187, 94, 43), (262, 83, 58))
 # ---------- USER CONFIG ----------
 
 ENABLE_GPG = True                  # True = encrypt, False = plaintext only
-GPG_RECIPIENT = "pingslab@linux"  # must exist in: gpg --list-keys
+GPG_RECIPIENT = "pradeepubuntu@victus"  # must exist in: gpg --list-keys
 ALLOW_PLAINTEXT_FALLBACK = True
 
-ACCOUNTS_TXT = "accounts"
-ACCOUNTS_GPG = "accounts.gpg"
+DATA_DIR = Path.home() / ".pingsvaults"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
 
+ACCOUNTS_TXT = DATA_DIR / "accounts"
+ACCOUNTS_GPG = DATA_DIR / "accounts.gpg"
+CONFIG_FILE = DATA_DIR / "config.json"
 USE_COLORS = True
 # ---------- internal state ----------
 

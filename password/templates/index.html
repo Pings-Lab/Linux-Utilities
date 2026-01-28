@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }}</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f9f9fb;
+            --border: #e4e4e7;
+            --text: #09090b;
+            --text-muted: #71717a;
+            --primary: #18181b;
+            --accent: #2563eb;
+            --error: #dc2626;
+            --radius: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .brand { display: flex; align-items: center; gap: 0.75rem; }
+        .logo { 
+            width: 32px; height: 32px; background: var(--primary); 
+            border-radius: 6px; display: flex; align-items: center; 
+            justify-content: center; color: white; font-weight: bold; 
+        }
+
+        /* --- Layout --- */
+        .grid { display: grid; grid-template-columns: 350px 1fr; gap: 2.5rem; }
+
+        @media (max-width: 850px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        section {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+        }
+
+        /* --- Forms --- */
+        .form-group { margin-bottom: 1.25rem; }
+        label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+        
+        input[type="text"], input[type="number"], select {
+            width: 100%; padding: 0.6rem; border: 1px solid var(--border);
+            border-radius: 6px; font-size: 0.95rem; outline: none; transition: border 0.2s;
+        }
+        input:focus { border-color: var(--text-muted); }
+
+        .btn {
+            cursor: pointer; padding: 0.6rem 1rem; border-radius: 6px;
+            font-weight: 500; font-size: 0.9rem; transition: all 0.2s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            border: 1px solid var(--border); width: 100%;
+        }
+        .btn-primary { background: var(--primary); color: white; border: none; }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+        .btn-ghost:hover { background: var(--surface); }
+
+        /* --- Password Generator --- */
+        .gen-display {
+            background: var(--surface);
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px dashed var(--border);
+            font-family: "SFMono-Regular", Consolas, monospace;
+            text-align: center;
+            margin-bottom: 1rem;
+            word-break: break-all;
+            min-height: 1.5rem;
+        }
+
+        /* --- Vault List --- */
+        .scroll-area {
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        .vault-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1rem; border-bottom: 1px solid var(--border);
+        }
+        .vault-item:last-child { border-bottom: none; }
+        .item-meta { display: flex; align-items: center; gap: 1rem; }
+        .favicon { width: 24px; height: 24px; border-radius: 4px; background: var(--surface); }
+        
+        .pass-text { 
+            font-family: monospace; border: none; background: transparent; 
+            color: var(--text-muted); font-size: 1rem; width: 150px;
+        }
+
+        /* --- GPG Panel --- */
+        .warning-box {
+            background: #fff1f2; border: 1px solid #fecdd3;
+            padding: 0.75rem; border-radius: 6px; color: var(--error);
+            font-size: 0.8rem; margin-top: 1rem;
+        }
+        .recipients-list { height: 100px; margin-top: 0.5rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="brand">
+            <div class="logo">V</div>
+            <h1>{{ app_name }}</h1>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Local Mode Only</div>
+    </header>
+
+    <div class="grid">
+        <aside>
+            <section>
+                <h2>Quick Generate</h2>
+                <div class="form-group">
+                    <label>Password Length: <span id="len-ui">16</span></label>
+                    <input type="range" id="length-slider" min="8" max="64" value="16" 
+                           oninput="document.getElementById('len-ui').innerText = this.value">
+                </div>
+                <div class="gen-display" id="gen-output">••••••••</div>
+                <button type="button" class="btn btn-primary" onclick="fetchNewPassword()">Generate</button>
+                <button type="button" class="btn btn-ghost" style="margin-top: 0.5rem;" onclick="applyToForm()">Use This</button>
+            </section>
+
+            <section>
+                <h2>Configuration</h2>
+                <form action="/config" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" name="gpg_enabled" id="gpg_en" {% if config.gpg_enabled %}checked{% endif %}>
+                        <label for="gpg_en" style="margin: 0;">Enable GPG Encryption</label>
+                    </div>
+
+                    <label>Available Keys (select to add recipients)</label>
+                    <select name="recipients" multiple class="recipients-list">
+                        {% if gpg_keys %}
+                            {% for key in gpg_keys %}
+                                <option value="{{ key }}" {% if key in config.recipients %}selected{% endif %}>{{ key }}</option>
+                            {% endfor %}
+                        {% else %}
+                            <!-- no keys found; allow user to still paste recipient strings if they want -->
+                            <option disabled>No keys detected</option>
+                        {% endif %}
+                        {% for recipient in config.recipients %}
+                            {% if recipient not in gpg_keys %}
+                                <!-- show any manual/previous recipients at end so user can keep them -->
+                                <option value="{{ recipient }}" selected>{{ recipient }} (manual)</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+
+                    {% if not gpg_available %}
+                    <div class="warning-box">
+                        <strong>GPG Not Found:</strong> Encryption is disabled. Install GPG on your system to secure your vault.
+                    </div>
+                    {% endif %}
+                    
+                    <button type="submit" class="btn btn-ghost" style="margin-top: 1rem;">Update Config</button>
+                </form>
+            </section>
+        </aside>
+
+        <main>
+            <section>
+                <h2>New Entry</h2>
+                <form action="/save" method="POST" id="save-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Website / Label</label>
+                            <input type="text" name="website" id="web-input" placeholder="github.com" oninput="updateFavicon(this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="text" name="password" id="pass-input" required>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+                        <img id="prev-icon" class="favicon" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                        <span id="prev-url" style="font-size: 0.8rem; color: var(--text-muted);">Preview favicon</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save to Vault</button>
+                </form>
+            </section>
+
+            <section>
+                <h2>Vault Contents</h2>
+                <div class="scroll-area">
+                    {% if passwords %}
+                        {% for p_block in passwords %}
+                            {% if p_block.strip() %}
+                                {% set parts = p_block.split('\n') %}
+                                <div class="vault-item">
+                                    <div class="item-meta">
+                                        <img class="favicon" src="https://www.google.com/s2/favicons?domain={{ parts[0] }}">
+                                        <div>
+                                            <div style="font-weight: 600; font-size: 0.95rem;">{{ parts[0] }}</div>
+                                            <input type="password" class="pass-text" value="{{ parts[1] }}" readonly>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-ghost" style="width: auto; padding: 0.4rem 0.8rem;" onclick="togglePass(this)">Show</button>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                            Vault is empty. Generate and save a password to get started.
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Fetch password from FastAPI backend
+    async function fetchNewPassword() {
+        const length = document.getElementById('length-slider').value;
+        const formData = new FormData();
+        formData.append('length', length);
+        formData.append('csrf_token', '{{ csrf_token }}');
+
+        try {
+            const response = await fetch('/generate', {
+                method: 'POST',
+                body: formData
+            });
+            if (!response.ok) throw new Error('Bad response');
+            const data = await response.json();
+            document.getElementById('gen-output').innerText = data.password;
+        } catch (e) {
+            alert("Error connecting to backend");
+        }
+    }
+
+    function applyToForm() {
+        const pwd = document.getElementById('gen-output').innerText;
+        if (pwd.includes('•')) return;
+        document.getElementById('pass-input').value = pwd;
+    }
+
+    function updateFavicon(val) {
+        const img = document.getElementById('prev-icon');
+        const txt = document.getElementById('prev-url');
+        if (!val) {
+            img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+            txt.innerText = 'Preview favicon';
+            return;
+        }
+        // strip protocol and path, keep domain
+        let domain = val.replace(/^https?:\/\//i, '').split('/')[0].trim();
+        img.src = `https://www.google.com/s2/favicons?domain=${domain}`;
+        txt.innerText = domain;
+    }
+
+    function togglePass(btn) {
+        const input = btn.closest('.vault-item').querySelector('.pass-text');
+        if (input.type === "password") {
+            input.type = "text";
+            btn.innerText = "Hide";
+        } else {
+            input.type = "password";
+            btn.innerText = "Show";
+        }
+    }
+</script>
+
+</body>
+</html>
